@@ -5,14 +5,51 @@ function App() {
   const [calc, setCalc] = useState("");
   const [result, setResult] = useState("");
 
-  const operators = ["/", "*", "+", "-", "."];
+  const operators = ["/", "*", "+", "-"];
+  const deci = ["."];
+
+  ///////////////////////////////////////////////////////////////////////
   const updateCalc = (value) => {
     if (operators.includes(value) && calc === "") return;
 
-    if (operators.includes(value) && operators.includes(calc.slice(-1))) {
+    if (deci.includes(value) && calc === "") {
+      setCalc(0 + value);
+      return;
+    }
+
+    if (
+      (operators.includes(value) && operators.includes(calc.slice(-1))) ||
+      (deci.includes(value) && deci.includes(calc.slice(-1)))
+    ) {
       const valup = calc.slice(0, -1);
 
       setCalc(valup + value);
+      return;
+    }
+    // decimal toggler
+    ////////////////////////////////////////////////////////////////
+    let deciClicked = false;
+
+    if (calc.lastIndexOf(".") > calc.lastIndexOf("/")) {
+      deciClicked = true;
+    }
+
+    if (calc.lastIndexOf(".") > calc.lastIndexOf("*")) {
+      deciClicked = true;
+    }
+    if (calc.lastIndexOf(".") > calc.lastIndexOf("+")) {
+      deciClicked = true;
+    }
+    if (calc.lastIndexOf(".") > calc.lastIndexOf("-")) {
+      deciClicked = true;
+    }
+
+    // if (deci.includes(value)) deciClicked = true;
+    if (operators.includes(value)) deciClicked = false;
+    console.log(calc.lastIndexOf("."), calc.lastIndexOf("/"));
+    console.log(deciClicked);
+    ///////////////////////////////////////////////////////////////////////
+    if (deci.includes(value) && deciClicked === true) {
       return;
     }
 
@@ -20,9 +57,11 @@ function App() {
 
     if (!operators.includes(value)) {
       setResult(eval(calc + value).toString());
-      console.log(calc + value);
+      // console.log(typeof (calc + value));
     }
   };
+
+  ////////////////////////////////////////////////////////////////////
 
   const numsButt = () => {
     const digits = [];
